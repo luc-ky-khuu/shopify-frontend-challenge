@@ -45,5 +45,8 @@ module.exports = {
   stats: 'summary',
   performance: {
     hints: false
-  }
+  },
+  plugins: [
+    new webpack.EnvironmentPlugin(['APIKey'])
+  ]
 };

@@ -1,3 +1,13 @@
+body {
+  font-family: Roboto, sans-serif;
+}
+
+ul {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
 .container {
   max-width: 900px;
   margin: 0 auto;
@@ -12,6 +22,13 @@
   flex-basis: 100%;
 }
 
+.col-20 {
+  flex-basis: 20%;
+}
+
+.col-80 {
+  flex-basis: 80%
+}
 .w-100 {
   width: 100%;
 }
@@ -39,10 +56,27 @@
   margin: 0.5rem auto;
 }
 
+.mb-1 {
+  margin-bottom: 1rem;
+}
+
+.fw-bolder {
+  font-weight: bolder;
+}
+
+.fs-1dot3 {
+  font-size: 1.3rem;
+}
+
 .submit-button {
   background-color: rgb(0,67,200);
   color: white;
-  padding: 0.7rem 2rem;
+  padding: 0.8rem 2rem;
   border: none;
   border-radius: 5px;
+}
+
+.response-list-item {
+  background-color: rgb(238,238,238);
+  padding: 1rem;
 }

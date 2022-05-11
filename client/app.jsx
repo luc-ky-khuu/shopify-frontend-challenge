@@ -4,7 +4,9 @@ class App extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      prompt: null
+      prompt: null,
+      response: null,
+      responseList: [],
     }
     this.handleSubmit = this.handleSubmit.bind(this)
   }
@@ -13,27 +15,13 @@ class App extends React.Component {
     event.preventDefault();
     const prompt = event.target.prompt.value;
     const data = {
-      prompt: "Write a poem about a dog wearing skis",
+      prompt: prompt,
       temperature: 0.5,
       max_tokens: 64,
       top_p: 1.0,
       frequency_penalty: 0.0,
       presence_penalty: 0.0,
     };
-    const sampleId = {
-      "id": "cmpl-56Ty4Str7M4xbSHHHa8BeyaryUQx4",
-      "object": "text_completion",
-      "created": 1652226848,
-      "model": "text-curie:001",
-      "choices": [
-        {
-          "text": "\n\nDogs wearing skis\n\nOn the snow\n\nThey're a sight to see\n\nSo happy and carefree\n\nWhat a joy to watch!",
-          "index": 0,
-          "logprobs": null,
-          "finish_reason": "stop"
-        }
-      ]
-    }
     fetch("https://api.openai.com/v1/engines/text-curie-001/completions", {
       method: "POST",
       headers: {
@@ -44,9 +32,14 @@ class App extends React.Component {
     })
     .then(result => result.json())
     .then(result => {
+      event.target.prompt.value = '';
+      const newResponseList = result.choices.concat(this.state.responseList);
+      const newPromptList = [prompt].concat(this.state.promptList);
       this.setState({
         prompt: prompt,
-        response: result.choices[0].text
+        response: result.choices[0].text,
+        responseList: newResponseList,
+        promptList: newPromptList
       })
     });
   }
@@ -54,12 +47,29 @@ class App extends React.Component {
   form() {
     return (
       <form className='row w-100' onSubmit={this.handleSubmit}>
-        <label className='col-full' htmlFor="prompt">Enter prompt</label>
+        <label className='col-full fw-bolder' htmlFor="prompt">Enter prompt</label>
         <textarea className='col-full my-dot5' name="prompt" id="prompt" cols="30" rows="10"></textarea>
         <div className="row justify-content-end w-100">
           <input className='submit-button' type="submit" value='Submit' />
         </div>
       </form>
+    )
+  }
+
+  createListItem(item, index, prompt) {
+    return(
+      <>
+        <li className='response-list-item mb-1 fs-1dot3' key={index}>
+          <div className="row mb-1">
+            <div className="col-20 fw-bolder">Prompt:</div>
+            <div className="col-80">{this.state.promptList[index]}</div>
+          </div>
+          <div className="row fs-1dot3">
+            <div className="col-20 fw-bolder">Response:</div>
+            <div className="col-80">{item.text}</div>
+          </div>
+        </li>
+      </>
     )
   }
 
@@ -70,7 +80,12 @@ class App extends React.Component {
         <div className="row w-100">
           {this.form()}
         </div>
-        <h2>Response</h2>
+        <h2>Responses</h2>
+        <div className="row w-100">
+          <ul className='w-100'>
+            {this.state.responseList && this.state.responseList.map((item, index) => this.createListItem(item, index))}
+          </ul>
+        </div>
       </div>
     )
   }

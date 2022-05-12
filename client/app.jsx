@@ -9,12 +9,13 @@ class App extends React.Component {
       responseList: [],
     }
     this.handleSubmit = this.handleSubmit.bind(this)
-    this.componentWillUnmount = this.componentWillUnmount.bind(this)
   }
 
-  componentWillUnmount() {
-    const dataJSON = JSON.stringify(this.state);
-    localStorage.setItem('prompts-and-responses', dataJSON);
+  componentDidMount() {
+    const previousDataJSON = localStorage.getItem('prompts-and-responses');
+    if (previousDataJSON !== null) {
+      this.setState(JSON.parse(previousDataJSON))
+    }
   }
 
   handleSubmit(event) {
@@ -46,6 +47,9 @@ class App extends React.Component {
         response: result.choices[0].text,
         responseList: newResponseList,
         promptList: newPromptList
+      }, () => {
+        const dataJSON = JSON.stringify(this.state);
+        localStorage.setItem('prompts-and-responses', dataJSON);
       })
     });
   }

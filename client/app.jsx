@@ -7,15 +7,28 @@ class App extends React.Component {
       prompt: null,
       response: null,
       responseList: [],
+      promptList: []
     }
-    this.handleSubmit = this.handleSubmit.bind(this)
+    this.handleSubmit = this.handleSubmit.bind(this);
+    this.deleteItem = this.deleteItem.bind(this);
   }
 
   componentDidMount() {
     const previousDataJSON = localStorage.getItem('prompts-and-responses');
     if (previousDataJSON !== null) {
-      this.setState(JSON.parse(previousDataJSON))
+      this.setState(JSON.parse(previousDataJSON));
     }
+  }
+
+  deleteItem(index) {
+    const newPromptList = this.state.promptList;
+    const newResponseList = this.state.responseList;
+    newPromptList.splice(index, 1);
+    newResponseList.splice(index,1);
+    this.setState({
+      responseList: newResponseList,
+      promptList: newPromptList
+    }, this.saveData())
   }
 
   handleSubmit(event) {
@@ -50,11 +63,13 @@ class App extends React.Component {
         response: result.choices[0].text,
         responseList: newResponseList,
         promptList: newPromptList
-      }, () => {
-        const dataJSON = JSON.stringify(this.state);
-        localStorage.setItem('prompts-and-responses', dataJSON);
-      })
+      }, this.saveData())
     });
+  }
+
+  saveData() {
+    const dataJSON = JSON.stringify(this.state);
+    localStorage.setItem('prompts-and-responses', dataJSON);
   }
 
   form() {
@@ -71,18 +86,19 @@ class App extends React.Component {
 
   createListItem(item, index, prompt) {
     return(
-      <>
-        <li className='response-list-item mb-1 fs-1dot3' key={index}>
-          <div className="row mb-1">
-            <div className="col-20 fw-bolder">Prompt:</div>
-            <div className="col-80">{this.state.promptList[index]}</div>
-          </div>
-          <div className="row fs-1dot3">
-            <div className="col-20 fw-bolder">Response:</div>
-            <div className="col-80">{item.text}</div>
-          </div>
-        </li>
-      </>
+      <li className='response-list-item mb-1 fs-1dot3 relative' key={index}>
+        <button className='absolute right-1 delete-button' onClick={() => this.deleteItem(index)}>
+          <i className='material-symbols-outlined'>close</i>
+        </button>
+        <div className="row mb-1">
+          <div className="col-20 fw-bolder">Prompt:</div>
+          <div className="col-80">{this.state.promptList[index]}</div>
+        </div>
+        <div className="row fs-1dot3">
+          <div className="col-20 fw-bolder">Response:</div>
+          <div className="col-80">{item.text}</div>
+        </div>
+      </li>
     )
   }
 

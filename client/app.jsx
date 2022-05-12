@@ -4,8 +4,6 @@ class App extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      prompt: null,
-      response: null,
       responseList: [],
       promptList: []
     }
@@ -28,7 +26,7 @@ class App extends React.Component {
     this.setState({
       responseList: newResponseList,
       promptList: newPromptList
-    }, this.saveData())
+    },() => this.saveData())
   }
 
   handleSubmit(event) {
@@ -59,11 +57,9 @@ class App extends React.Component {
       const newResponseList = result.choices.concat(this.state.responseList);
       const newPromptList = [prompt].concat(this.state.promptList);
       this.setState({
-        prompt: prompt,
-        response: result.choices[0].text,
         responseList: newResponseList,
         promptList: newPromptList
-      }, this.saveData())
+      },() => this.saveData())
     });
   }
 

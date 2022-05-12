@@ -7,6 +7,7 @@ class App extends React.Component {
       prompt: null,
       response: null,
       responseList: [],
+      promptList: []
     }
     this.handleSubmit = this.handleSubmit.bind(this)
   }
@@ -16,6 +17,17 @@ class App extends React.Component {
     if (previousDataJSON !== null) {
       this.setState(JSON.parse(previousDataJSON))
     }
+  }
+
+  deleteItem(index) {
+    const newPromptList = [...this.state.promptlist];
+    const newResponseList = [...this.state.responseList];
+    newPromptList.splice(index, 1);
+    newResponseList.splice(index,1);
+    this.setState({
+      responseList: newResponseList,
+      promptList: newPromptList
+    })
   }
 
   handleSubmit(event) {
@@ -71,21 +83,19 @@ class App extends React.Component {
 
   createListItem(item, index, prompt) {
     return(
-      <>
-        <li className='response-list-item mb-1 fs-1dot3 relative' key={index}>
-          <button className='absolute right-1 delete-button'>
-            <i className='material-symbols-outlined'>close</i>
-          </button>
-          <div className="row mb-1">
-            <div className="col-20 fw-bolder">Prompt:</div>
-            <div className="col-80">{this.state.promptList[index]}</div>
-          </div>
-          <div className="row fs-1dot3">
-            <div className="col-20 fw-bolder">Response:</div>
-            <div className="col-80">{item.text}</div>
-          </div>
-        </li>
-      </>
+      <li className='response-list-item mb-1 fs-1dot3 relative' key={index}>
+        <button className='absolute right-1 delete-button' >
+          <i className='material-symbols-outlined'>close</i>
+        </button>
+        <div className="row mb-1">
+          <div className="col-20 fw-bolder">Prompt:</div>
+          <div className="col-80">{this.state.promptList[index]}</div>
+        </div>
+        <div className="row fs-1dot3">
+          <div className="col-20 fw-bolder">Response:</div>
+          <div className="col-80">{item.text}</div>
+        </div>
+      </li>
     )
   }
 

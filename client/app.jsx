@@ -9,6 +9,12 @@ class App extends React.Component {
       responseList: [],
     }
     this.handleSubmit = this.handleSubmit.bind(this)
+    this.componentWillUnmount = this.componentWillUnmount.bind(this)
+  }
+
+  componentWillUnmount() {
+    const dataJSON = JSON.stringify(this.state);
+    localStorage.setItem('prompts-and-responses', dataJSON);
   }
 
   handleSubmit(event) {

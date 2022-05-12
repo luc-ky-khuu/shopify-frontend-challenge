@@ -11,9 +11,19 @@ class App extends React.Component {
     this.handleSubmit = this.handleSubmit.bind(this)
   }
 
+  componentDidMount() {
+    const previousDataJSON = localStorage.getItem('prompts-and-responses');
+    if (previousDataJSON !== null) {
+      this.setState(JSON.parse(previousDataJSON))
+    }
+  }
+
   handleSubmit(event) {
     event.preventDefault();
     const prompt = event.target.prompt.value;
+    if (!prompt) {
+      return;
+    }
     const data = {
       prompt: prompt,
       temperature: 0.5,
@@ -40,6 +50,9 @@ class App extends React.Component {
         response: result.choices[0].text,
         responseList: newResponseList,
         promptList: newPromptList
+      }, () => {
+        const dataJSON = JSON.stringify(this.state);
+        localStorage.setItem('prompts-and-responses', dataJSON);
       })
     });
   }
@@ -50,7 +63,7 @@ class App extends React.Component {
         <label className='col-full fw-bolder' htmlFor="prompt">Enter prompt</label>
         <textarea className='col-full my-dot5' name="prompt" id="prompt" cols="30" rows="10"></textarea>
         <div className="row justify-content-end w-100">
-          <input className='submit-button' type="submit" value='Submit' />
+          <button className='submit-button' type="submit">Submit</button>
         </div>
       </form>
     )

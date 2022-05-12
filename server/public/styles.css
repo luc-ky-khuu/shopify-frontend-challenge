@@ -16,6 +16,14 @@ textarea {
   resize: none;
 }
 
+.material-symbols-outlined {
+  font-variation-settings:
+  'FILL' 0,
+  'wght' 400,
+  'GRAD' 0,
+  'opsz' 48
+}
+
 .container {
   max-width: 900px;
   margin: 0 auto;
@@ -57,6 +65,10 @@ textarea {
   right: 0;
 }
 
+.right-1 {
+  right: 1rem;
+}
+
 .justify-content-end {
   justify-content: flex-end;
 }
@@ -87,4 +99,8 @@ textarea {
 .response-list-item {
   background-color: rgb(238,238,238);
   padding: 1rem;
+}
+
+.delete-button {
+  border: none;
 }

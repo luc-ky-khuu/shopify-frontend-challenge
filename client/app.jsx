@@ -72,7 +72,10 @@ class App extends React.Component {
   createListItem(item, index, prompt) {
     return(
       <>
-        <li className='response-list-item mb-1 fs-1dot3' key={index}>
+        <li className='response-list-item mb-1 fs-1dot3 relative' key={index}>
+          <button className='absolute right-1 delete-button'>
+            <i className='material-symbols-outlined'>close</i>
+          </button>
           <div className="row mb-1">
             <div className="col-20 fw-bolder">Prompt:</div>
             <div className="col-80">{this.state.promptList[index]}</div>
